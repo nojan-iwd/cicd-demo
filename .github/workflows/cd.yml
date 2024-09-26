@@ -84,4 +84,5 @@ jobs:
         run: |
           cd cdk-deployment
           mv temp-core.json cdk.json
+          cdk bootstrap
           npx cdk deploy -c env=dev --all --require-approval never

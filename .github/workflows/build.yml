@@ -9,8 +9,7 @@ jobs:
     name: build-iwd
     runs-on: ubuntu-latest
     environment:
-      name: qa
-    if: github.repository_owner == 'Intelliware'
+      name: dev
 
     steps:
 
@@ -28,13 +27,3 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-
-      - name: Notify on Failure
-        if: failure()
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          SNS_TOPIC_ARN: arn:aws:sns:us-east-1:935032672686:element-digital-qa-github-actions
-        run: |
-          aws sns publish --topic-arn "$SNS_TOPIC_ARN" --message "Job *${{ github.job }}* in workflow *${{ github.workflow }}* of repository *${{ github.repository }}* has the following status: *${{ job.status }}*." --region "$AWS_REGION"
