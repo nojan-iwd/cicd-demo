@@ -1,0 +1,45 @@
+services:
+  edb:
+    image: postgres:16.3-alpine
+    environment:
+      POSTGRES_DB: edb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password1
+    volumes:
+      - postgres_edb_data:/var/lib/postgresql/data
+      - ./common/src/testFixtures/resources/seed_edb_postgres.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - eapi_network
+    healthcheck:
+      test: ["CMD-SHELL", "PGPASSWORD=password1 psql -U postgres -h localhost -p 5432 -d edb -c \"select version(); \""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  mainframedb:
+    image: postgres:16.3-alpine
+    environment:
+      POSTGRES_DB: mainframedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password1
+    volumes:
+      - postgres_mf_data:/var/lib/postgresql/data
+      - ./common/src/testFixtures/resources/seed_mf_postgres.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    ports:
+      - "5434:5432"
+    networks:
+      - eapi_network
+    healthcheck:
+      test: ["CMD-SHELL", "PGPASSWORD=password1 psql -U postgres -h localhost -p 5432 -d mainframedb -c \"select version(); \""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  eapi_network:
+    driver: bridge
+
+volumes:
+  postgres_edb_data:
+  postgres_mf_data:

@@ -1,0 +1,23 @@
+[versions]
+jacoco = '0.8.12'
+springBoot = '3.3.0'
+
+[libraries]
+archunit = { module = 'com.tngtech.archunit:archunit', version = '1.1.1' }
+commons-io = { module = 'commons-io:commons-io', version = '2.16.1' }
+instancio = { module = 'org.instancio:instancio-core', version = '4.6.0' }
+opentelemetry-base = { module = 'io.opentelemetry:opentelemetry-bom', version = '1.38.0' }
+opentelemetry-instrumentation = { module = 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom', version = '2.3.0' }
+opentelemetry-spring-starter = { module = 'io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter', version = '2.3.0-alpha' }
+postgres = { module = 'org.postgresql:postgresql', version = '42.7.3' }
+spring-cloud-aws-dependencies = { module = 'io.awspring.cloud:spring-cloud-aws-dependencies', version = '3.2.0-M1' }
+spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2023.0.2' }
+sybase = { module = 'jdbc.sybase:jconn4', version = '16.0' }
+
+[plugins]
+graalvm-native = { id = 'org.graalvm.buildtools.native', version = '0.10.2' }
+shadow = { id = 'com.github.johnrengelman.shadow', version = '8.1.1' }
+sonar = { id = 'org.sonarqube', version = '5.1.0.4882' }
+spring-boot = { id = 'org.springframework.boot', version.ref = 'springBoot' }
+spring-boot-thin-launcher = { id = 'org.springframework.boot.experimental.thin-launcher', version = '1.0.31.RELEASE' }
+spring-dependency-management = { id = 'io.spring.dependency-management', version = '1.1.5' }

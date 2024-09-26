@@ -1,0 +1,54 @@
+import org.gradle.internal.jvm.Jvm
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+
+pluginManagement {
+    repositories {
+        if (System.getProperty('enableElementArtifactory') != null) {
+            maven {
+                allowInsecureProtocol true
+                url 'http://artifactory.fleet.ad/artifactory/gradleplugin/'
+            }
+        }
+        gradlePluginPortal()
+        maven { url 'https://repo.spring.io/milestone' }
+        maven { url 'https://repo.spring.io/snapshot' }
+    }
+}
+
+rootProject.name = 'enterprise-api'
+include(
+        'common',
+        'core',
+        'gauge'
+)
+
+gradle.ext {
+    javaVersion = JavaVersion.VERSION_21
+
+    logger.quiet "JVM                   : ${Jvm.current()}"
+    logger.quiet "Gradle                : ${getGradle().getGradleVersion()}"
+    logger.quiet "OS                    : ${DefaultNativePlatform.currentOperatingSystem.name}"
+    logger.quiet "Available Processors  : ${Runtime.runtime.availableProcessors()}"
+    logger.quiet "tmpDir                : ${System.getProperty('java.io.tmpdir')}"
+    logger.quiet ""
+    logger.quiet "${rootProject.name} Settings"
+    logger.quiet "Java Version          : ${javaVersion}"
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "http://maven.jumpmind.com/repo/"
+            allowInsecureProtocol = true
+        }
+        if (System.getProperty('enableElementArtifactory') != null) {
+            maven {
+                allowInsecureProtocol true
+                url 'http://artifactory.fleet.ad/ui/native/remote-repos'
+            }
+        }
+    }
+}
+

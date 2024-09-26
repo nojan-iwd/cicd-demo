@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    edb:
+      url: ${ENTERPRISE_EDB_URL:jdbc:sybase:Tds:psplsyb01p.fleet.ad:2050}
+      driverClassName: com.sybase.jdbc4.jdbc.SybDriver
+      username: ${ENTERPRISE_EDB_USER:gen_api_core_auth}
+      password: ${ENTERPRISE_EDB_PASSWORD}
+      hikari:
+        maximum-pool-size: 1
+        minimum-idle: 1
+        idle-timeout: 30000
+        connection-timeout: 10000
+        max-lifetime: 60000
+        initialization-fail-timeout: 1
+
+    mainframe:
+      url: ${ENTERPRISE_MAINFRAME_URL:jdbc:postgresql://dbpginst2d.dev.fleet.ad:50002/tcvd1_mfdc}
+      driverClassName: org.postgresql.Driver
+      username: ${ENTERPRISE_MAINFRAME_USER:gen_api_core_auth}
+      password: ${ENTERPRISE_MAINFRAME_PASSWORD}
+      hikari:
+        maximum-pool-size: 1
+        minimum-idle: 1
+        idle-timeout: 30000
+        connection-timeout: 10000
+        max-lifetime: 60000
+        initialization-fail-timeout: 1

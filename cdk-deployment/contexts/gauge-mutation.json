@@ -1,0 +1,56 @@
+{
+  "project": {
+    "dev": "enterprise-apis",
+    "qa": "enterprise-apis"
+  },
+  "region": {
+    "dev": "us-east-1",
+    "qa": "us-east-1"
+  },
+  "vpc_id": {
+    "dev": "vpc-03fbd572f7da1bfed",
+    "qa": "vpc-028ec13240f68e9ea"
+  },
+  "eapi_name": {
+    "dev": "gauge-mutation",
+    "qa": "gauge-mutation"
+  },
+  "lambda_edb_jdbc_url": {
+    "dev": "jdbc:sybase:Tds:edbsyb.dev.fleet.ad:2050",
+    "qa": "jdbc:sybase:Tds:edbsyb.qa.fleet.ad:1050"
+  },
+  "lambda_mainframe_jdbc_url": {
+    "dev": "jdbc:postgresql://dbpginst2d.dev.fleet.ad:50002/tcvd1_mfdc",
+    "qa": "jdbc:postgresql://dbpginst2q.qa.fleet.ad:50002/tcvd1_mfdc"
+  },
+  "lambda_edb_user": {
+    "dev": "gen_api_core_auth",
+    "qa": "gen_api_core_auth"
+  },
+  "lambda_mainframe_user": {
+    "dev": "gen_api_core_auth",
+    "qa": "gen_api_core_auth"
+  },
+  "otlp_endpoint": {
+    "dev": "https://otlp.nr-data.net",
+    "qa": "https://otlp.nr-data.net"
+  },
+  "profiles": {
+    "dev": "dev",
+    "qa": "qa"
+  },
+  "security_group_id": {
+    "dev": "sg-0f90f5d393be20424",
+    "qa": "sg-02e1dcc46bd7b76dd"
+  },
+  "subnet_ids": {
+    "dev": [
+      "subnet-0094d437db66d9528",
+      "subnet-0a89ce93b674e2962"
+    ],
+    "qa": [
+      "subnet-005c85dc32b72b46b",
+      "subnet-0226b5543649d76dc"
+    ]
+  }
+}

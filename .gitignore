@@ -1,0 +1,114 @@
+# Gradle
+.gradle/
+build/
+gradle.properties
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
+
+# Plugin directory
+/.quarkus/cli/plugins/
+
+ts/
+js/
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+# *.tfstate
+# *.tfstate.*
+.terraform.lock.hcl
+
+# Crash log files
+crash.log
+
+# Exclude all .tfvars files, which might contain secret data, such as
+# password, private keys, and other sensitive data
+# *.tfvars
+# *.tfvars.json
+
+# Ignore override files as they are usually used to override resources locally and should not be checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore any .log files that may be generated during terraform operations
+*.log
+
+# Ignore generated plan files, as these can contain sensitive data
+*.tfplan
+*.tfplan.*
+
+# Ignore any .bak files, often created as backups of previous versions of files
+*.bak
+
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+../HELP.md
+.gradle
+!../gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# CDK Deployment
+!cdk-deployment/*
+
+### STS ###
+.apt_generated
+.settings
+.springBeans
+.sts4-cache
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.ipr
+*.iml
+*.iws
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/

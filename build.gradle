@@ -1,0 +1,102 @@
+import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    alias libs.plugins.sonar apply false
+    alias libs.plugins.spring.boot apply false
+    alias libs.plugins.spring.dependency.management apply false
+}
+
+allprojects {
+    group = 'com.element.enterpriseapi'
+    version = '0.0.1-SNAPSHOT'
+}
+
+apply plugin: 'idea'
+idea {
+    project {
+        targetBytecodeVersion = gradle.ext.javaVersion
+        languageLevel = new IdeaLanguageLevel(gradle.ext.javaVersion.toString())
+    }
+}
+
+apply plugin: libs.plugins.sonar.get().getPluginId()
+sonar {
+    properties {
+        property 'sonar.coverage.jacoco.xmlReportPaths', rootProject.subprojects.collect { s -> s.layout.buildDirectory.getAsFile().get().getAbsolutePath() + '/reports/jacoco/jacocoCodeCoverage.xml' }
+
+        // See EM-717
+        property 'sonar.projectKey', 'enterprise-apis'
+        property 'sonar.token', 'fbabd7e6eb9613bd7081011414415b88cf98f283'
+        property 'sonar.host.url', 'https://sonar2.fleet.ad'
+        property 'sonar.exclusions', [
+                '**/com/element/enterpriseapi/common/**',
+                '**/com/element/enterpriseapi/exception/**',
+                '**/com/element/enterpriseapi/lambda/**',
+                '**/com/element/enterpriseapi/validation/**',
+                '**/com/element/enterpriseapi/core/CoreApplication.java',
+                '**/com/element/enterpriseapi/core/CoreConfiguration.java'
+        ]
+        property 'sonar.scm.disabled', 'True'
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        sourceCompatibility = gradle.ext.javaVersion
+        targetCompatibility = gradle.ext.javaVersion
+    }
+
+    apply plugin: libs.plugins.spring.dependency.management.get().getPluginId()
+    dependencyManagement {
+        imports {
+            mavenBom SpringBootPlugin.BOM_COORDINATES
+            mavenBom libs.spring.cloud.dependencies.get().toString()
+            mavenBom libs.spring.cloud.aws.dependencies.get().toString()
+            mavenBom libs.opentelemetry.base.get().toString()
+            mavenBom libs.opentelemetry.instrumentation.get().toString()
+        }
+    }
+
+    apply plugin: 'jacoco'
+    jacoco {
+        toolVersion = libs.versions.jacoco.get()
+    }
+    jacocoTestReport {
+        reports {
+            xml.required = true
+            xml.outputLocation = jacoco.reportsDirectory.file('jacocoCodeCoverage.xml')
+            html.outputLocation = jacoco.reportsDirectory.dir('html')
+        }
+    }
+    jacocoTestReport.dependsOn test
+
+    // Idea
+    idea {
+        module {
+            downloadJavadoc = false
+            downloadSources = true
+            targetBytecodeVersion = gradle.ext.javaVersion
+            languageLevel = new IdeaLanguageLevel(gradle.ext.javaVersion.toString())
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        systemProperty 'spring.profiles.active', 'test'
+    }
+}
+
+tasks.register('clean') {
+    delete rootProject.layout.buildDirectory
+}
+
+tasks.register('configWrapper') {
+    doLast {
+        wrapper.distributionUrl = "https://services.gradle.org/distributions/gradle-${wrapper.gradleVersion}-all.zip"
+    }
+}
+wrapper.distributionType = Wrapper.DistributionType.ALL
+wrapper.dependsOn 'configWrapper'

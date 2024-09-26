@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    edb:
+      url: jdbc:postgresql://localhost:5432/edb
+      driverClassName: org.postgresql.Driver
+      username: postgres
+      password: password1
+      hikari:
+        maximum-pool-size: 1
+        minimum-idle: 1
+        idle-timeout: 30000
+        connection-timeout: 10000
+        max-lifetime: 60000
+        initialization-fail-timeout: 1
+
+    mainframe:
+      url: jdbc:postgresql://localhost:5432/mainframe
+      driverClassName: org.postgresql.Driver
+      username: postgres
+      password: password1
+      hikari:
+        maximum-pool-size: 1
+        minimum-idle: 1
+        idle-timeout: 30000
+        connection-timeout: 10000
+        max-lifetime: 60000
+        initialization-fail-timeout: 1
+
+  cloud:
+    aws:
+      secretsmanager:
+        enabled: false
+
+eapi:
+  db:
+    useDbo: false
+
+otel:
+  sdk:
+    disabled: true

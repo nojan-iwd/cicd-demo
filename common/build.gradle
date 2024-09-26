@@ -1,0 +1,38 @@
+apply plugin: 'java-library'
+apply plugin: 'java-test-fixtures'
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok'
+
+    api 'io.opentelemetry:opentelemetry-extension-trace-propagators'
+
+    compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'io.opentelemetry:opentelemetry-sdk'
+    implementation 'org.springframework.cloud:spring-cloud-function-context'
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-jdbc'
+    implementation 'org.springframework:spring-messaging'
+    implementation libs.opentelemetry.spring.starter
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+
+    testFixturesAnnotationProcessor 'org.projectlombok:lombok'
+    testFixturesCompileOnly 'org.projectlombok:lombok'
+    testFixturesImplementation libs.archunit
+    testFixturesImplementation libs.commons.io
+    testFixturesImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testFixturesImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testFixturesImplementation 'org.springframework:spring-jdbc'
+    testFixturesImplementation 'org.testcontainers:junit-jupiter'
+    testFixturesImplementation 'org.testcontainers:postgresql'
+
+}

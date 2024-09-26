@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: gauge
+
+  cloud:
+    stream:
+      function:
+        routing:
+          enabled: true # SpEL expression which has access to both headers and payload - to determine which function gets executed
+
+  config:
+    import: optional:aws-secretsmanager:${ENTERPRISE_API_SECRET_NAME}
+
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    io.awspring.cloud: DEBUG
+
+aws:
+  region: ${AWS_REGION:us-east-1}
+
+otel:
+  propagators: tracecontext,b3
+  instrumentation:
+    micrometer:
+      enabled: true
+  resource:
+    attributes:
+      service:
+        name: enterprise-api-gauge
+        namespace: enterprise-api
+      deployment:
+        environment: ${ENV}
+      aws:
+        function-name: ${AWS_LAMBDA_FUNCTION_NAME}
+        function-version: ${AWS_LAMBDA_FUNCTION_VERSION}
+        region: ${AWS_REGION}
+  exporter:
+    otlp:
+      endpoint: ${OTLP_ENDPOINT:https://otlp.nr-data.net}
+      headers:
+        api-key: ${NEW_RELIC_API_KEY}
+      compression: gzip
+      protocol: http/protobuf
+      metrics:
+        temporality:
+          preference: DELTA
+  experimental:
+    resource:
+      disabled:
+        keys: process.command_args,process.command_line,process.runtime_description
+    exporter:
+      otlp:
+        retry:
+          enabled: true
+  attribute:
+    value:
+      length:
+        limit: 4095
+    count:
+      limit: 64
+  span:
+    attribute:
+      count:
+        limit: 64
+      value:
+        length:
+          limit: 4095
+    link:
+      count:
+        limit: 64
+    event:
+      count:
+        limit: 64
+  logs:
+    exporter: none
+  metrics:
+    exporter: otlp
+  traces:
+    exporter: otlp
