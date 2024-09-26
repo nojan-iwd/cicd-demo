@@ -8,11 +8,10 @@ on:
 
 jobs:
   build:
-    name: Build and Test
+    name: Build and Deploy
     runs-on: ubuntu-latest
     environment:
-      name: qa
-    if: github.repository_owner == 'EFM-Digital'
+      name: dev
 
     steps:
       - name: Checkout code
@@ -30,12 +29,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Upload Gauge's Lambda Function Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: lambda-gauge-zip
-          path: ./gauge/build/libs/gauge-0.0.1-SNAPSHOT-aws.jar
-
       - name: Upload Core's Lambda Function Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -43,27 +36,21 @@ jobs:
           path: ./core/build/libs/core-0.0.1-SNAPSHOT-aws.jar
 
   deploy:
-    name: Deploy to QA Environment
+    name: Deploy to the DEV Environment
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: qa
+      name: dev
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Gauge's Lambda Function Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: lambda-gauge-zip
-          path: ./cdk-deployment/assets/qa
-
       - name: Download Core's Lambda Function Artifact
         uses: actions/download-artifact@v4
         with:
           name: lambda-core-zip
-          path: ./cdk-deployment/assets/qa
+          path: ./cdk-deployment/assets/dev
 
       - name: Install jq
         run: |
@@ -89,12 +76,6 @@ jobs:
             $file1 | .context += $file2
           ' cdk.json contexts/core-mutation.json > temp-core.json
 
-          jq --slurp '
-            .[0] as $file1 |
-            .[1] as $file2 |
-            $file1 | .context += $file2
-          ' cdk.json contexts/gauge-mutation.json > temp-gauge.json
-
       - name: Deploy Core Module with CDK TypeScript
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -103,14 +84,4 @@ jobs:
         run: |
           cd cdk-deployment
           mv temp-core.json cdk.json
-          npx cdk deploy -c env=qa --all --require-approval never
-
-      - name: Deploy Gauge Module with CDK TypeScript
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-        run: |
-          cd cdk-deployment
-          mv temp-gauge.json cdk.json
-          npx cdk deploy -c env=qa --all --require-approval never
+          npx cdk deploy -c env=dev --all --require-approval never
