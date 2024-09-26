@@ -21,7 +21,8 @@ export class LambdaFunction {
         subnets: props?.config.subnets,
       },
       securityGroups: props?.config.securityGroups,
-      tracing: lambda.Tracing.ACTIVE
+      tracing: lambda.Tracing.ACTIVE,
+      allowPublicSubnet: true
     };
   };
 
